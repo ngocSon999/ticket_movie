@@ -2,26 +2,28 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
 
-class User extends Authenticatable
+class User extends CartalystUser
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'phone',
+        'last_login',
     ];
+
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -39,6 +41,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'is_super_admin' => 'boolean',
     ];
 }
