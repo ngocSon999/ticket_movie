@@ -21,12 +21,12 @@
         @include('admins.layouts.header')
     </div>
     <div class="row">
-        <div class="col-md-3 d-none d-md-block mt-4">
+        <div class="col-md-2 d-none d-md-block mt-4">
             @section('sidebar')
                 @include('admins.layouts.component.sidebar')
             @show
         </div>
-        <div class="col-md-9 col-12">
+        <div class="col-md-10 col-12">
             <div class="row d-flex justify-content-center mb-4">
                 @include('admins.layouts.message')
             </div>
@@ -43,6 +43,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <!-- datatable-->
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script src="{{ asset('/admin/js/page-app.js') }}"></script>
 @yield('js')
 </body>
 </html>
