@@ -50,7 +50,11 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Password <span class="color-red">*</span></label>
+                        <label for="exampleInputPassword1" class="form-label">Password
+                            @if(!isset($user))
+                                <span class="color-red">*</span>
+                            @endif
+                        </label>
                         <input type="password" class="form-control" name="password">
                         @if ($errors->has('password'))
                             @foreach ($errors->get('password') as $error)
