@@ -64,7 +64,7 @@
 @endsection
 @section('js')
     <script>
-        let table = $('#myTableUser').DataTable({
+        let tableUser = $('#myTableUser').DataTable({
             processing: true,
             serverSide: true,
             lengthMenu: [3, 5],
@@ -168,7 +168,14 @@
         });
 
         $('#search-user').on('click', function () {
-            table.draw();
+            tableUser.draw();
         });
+        $('#reset-search-user').on('click', function () {
+            $('#user_name').val('');
+            $('#email').val('');
+            $('#start_date').val('');
+            $('#end_date').val('');
+            tableUser.draw();
+        })
     </script>
 @endsection
