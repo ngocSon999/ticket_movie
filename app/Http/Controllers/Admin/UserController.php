@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Models\User;
 use App\Services\SentinelService;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Yajra\Datatables\Datatables;
 
 class UserController extends Controller
@@ -34,40 +39,18 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('admins.users.index');
+        $users = $this->sentinelService->getAllUser();
+        $roles = $this->sentinelService->getAllRoles();
+
+        return view('admins.users.index', compact('users', 'roles'));
     }
 
     public function getList(Request $request)
     {
-        $users = $this->sentinelService->getUser();
 
-        return DataTables::of($users)
-            ->addIndexColumn()
-            ->editColumn('first_name', function ($user) {
-                return $user->first_name;
-            })
-            ->editColumn('last_name', function ($user) {
-                return $user->last_name;
-            })
-            ->editColumn('email', function ($user) {
-                return $user->email;
-            })
-            ->editColumn('phone', function ($user) {
-                return $user->phone;
-            })
-            ->addColumn('role', function ($user) {
-                $role = $user->roles()->first();
-                return $role->name;
-            })
-            ->editColumn('created_at', function ($user) {
-                return $user->created_at->format('d-m-Y');
-            })
-            ->addColumn('action', function ($user) {
-                $action = view('admins.users.action', ['row' => $user])->render();
-                return $action;
-            })
-            ->rawColumns(['role', 'action'])
-            ->make(true);
+       $data = $this->sentinelService->getDataUserAndSearch($request);
+
+        return response()->json($data);
     }
 
     public function edit($id)
