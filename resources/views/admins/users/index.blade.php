@@ -122,7 +122,7 @@
                     }
                 },
                 {
-                    data: 'updated_at',
+                    data: 'created_at',
                     render: function (colValue) {
                         const today = new Date(colValue);
                         const yyyy = today.getFullYear();

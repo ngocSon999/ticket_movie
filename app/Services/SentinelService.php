@@ -6,7 +6,7 @@ use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class SentinelService
 {
@@ -106,6 +106,14 @@ class SentinelService
             $userQuery->whereHas('roles', function ($query) use ($roleId) {
                 $query->where('id', $roleId);
             });
+        }
+        if(!empty($request->input('start_date'))) {
+            $startDate = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
+            $userQuery->whereDate('created_at', '>=', $startDate);
+        }
+        if(!empty($request->input('end_date'))) {
+            $endDate = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+            $userQuery->whereDate('created_at', '<=', $endDate);
         }
 
 
