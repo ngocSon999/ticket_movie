@@ -4,6 +4,9 @@ namespace App\Services;
 use App\Repositories\UserRepository;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Cartalyst\Sentinel\Users\UserInterface;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class SentinelService
 {
@@ -29,6 +32,11 @@ class SentinelService
         return Sentinel::getRoleRepository()->where('slug', '!=', 'super-admin')->get();
     }
 
+    public function getAllRoles()
+    {
+        return Sentinel::getRoleRepository()->get();
+    }
+
     public function createUser($request)
     {
         $credentials = [
@@ -41,12 +49,11 @@ class SentinelService
         $userAdmin = Sentinel::registerAndActivate($credentials);
         $userAdmin->roles()->attach(Sentinel::findRoleById($request->role));
     }
-
-    public function getUser($slug = null)
+    public function getAllUser($slug = null)
     {
         if (!empty($slug)) {
             $users = Sentinel::getUserRepository()->whereHas('roles', function ($query) use ($slug) {
-               $query->where('slug', $slug);
+                $query->where('slug', $slug);
             })->get();
 
             return $users;
@@ -57,6 +64,60 @@ class SentinelService
 
             return $users;
         }
+    }
+    public function getDataUserAndSearch($request = null)
+    {
+        $orderSorts = $request->input('order');
+        $dataColumns = $request->input('columns');
+
+        $start = $request->input('start', 1);
+        $length = $request->input('length', 10);
+        $page = floor($start / $length) + 1;
+
+        $search = $request->input('search');
+
+        /** @var LengthAwarePaginator $userQuery */
+        $userQuery = Sentinel::getUserRepository()->with(['roles']);
+
+        if (!empty($search['value'])) {
+            $userQuery
+                ->orWhere('email', 'like', "%{$search['value']}%")
+                ->orWhere('phone', 'like', "%{$search['value']}%")
+                ->orWhere('first_name', 'like', "%{$search['value']}%")
+                ->orWhere('last_name', 'like', "%{$search['value']}%");
+        };
+
+        foreach ($orderSorts as $orderSort) {
+            $orderSortColumn = $orderSort['column'];
+            $dir = $orderSort['dir'];
+            $field = $dataColumns[$orderSortColumn]['data'];
+            if (!empty($field) && !empty($dir)) {
+                $userQuery->orderBy($field, $dir);
+            }
+        }
+        if($request->input('user_name')) {
+            $userQuery->where('first_name', 'like', "%{$request->input('user_name')}%");
+        }
+        if($request->input('email')) {
+            $userQuery->where('email', $request->input('email'));
+        }
+        if(!empty($request->input('role_id'))) {
+            $roleId = $request->input('role_id');
+            $userQuery->whereHas('roles', function ($query) use ($roleId) {
+                $query->where('id', $roleId);
+            });
+        }
+
+
+        /** @var LengthAwarePaginator $usersPaginate */
+        $usersPaginate = $userQuery->paginate($length, '*', 'users', $page);
+        $recordsTotal = $usersPaginate->total();
+
+        return [
+            'data' => $usersPaginate->all(),
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsTotal
+        ];
     }
 
     public function getUserById($id)
@@ -76,7 +137,11 @@ class SentinelService
         if (!empty($request->password)) {
             $credentials['password'] = $request->password;
         }
-        Sentinel::update($user, $credentials);
+        $user = Sentinel::update($user, $credentials);
+        if ($request->role) {
+            $roleUpdate = Sentinel::findRoleById($request->role);
+            $user->roles()->sync($roleUpdate);
+        }
     }
     public function deleteUserById($id)
     {
