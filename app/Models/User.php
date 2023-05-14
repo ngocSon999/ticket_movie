@@ -14,6 +14,8 @@ class User extends CartalystUser
      *
      * @var array<int, string>
      */
+    protected $table = 'users';
+
     protected $fillable = [
         'first_name',
         'last_name',
@@ -43,4 +45,9 @@ class User extends CartalystUser
     protected $casts = [
         'is_super_admin' => 'boolean',
     ];
+
+    public static function getTableName(): string
+    {
+        return (new self())->getTable();
+    }
 }

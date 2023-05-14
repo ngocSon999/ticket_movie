@@ -1,4 +1,5 @@
 @extends('admins.layouts.master')
+@section('title', 'Nhân viên')
 @section("style")
     <style>
         table.dataTable.no-footer {
@@ -67,7 +68,7 @@
         let tableUser = $('#myTableUser').DataTable({
             processing: true,
             serverSide: true,
-            lengthMenu: [3, 5],
+            lengthMenu: [10, 25, 50],
             "oLanguage": {
                 "sLengthMenu": "Hiển thị _MENU_ dữ liệu trên trang",
                 "sZeroRecords": "Không có dữ liệu",
