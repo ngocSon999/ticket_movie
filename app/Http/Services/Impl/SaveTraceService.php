@@ -1,15 +1,16 @@
 <?php
-namespace App\Services;
+namespace App\Http\Services\Impl;
 
+use App\Http\Services\SaveTraceServiceInterface;
 use App\Models\SaveTrace;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
-class SaveTraceService
+class SaveTraceService implements SaveTraceServiceInterface
 {
-    public function saveTraces($collect, $action = null)
+    public function saveTraces($collect, $action = null): void
     {
         $data = [
-            'user_id' => Sentinel::getUser()->id,
+            'user_id' => Sentinel::getUser()?->id,
             'record_id' => $collect->id,
             'table_name' => $collect->getTableName(),
             'table_type' => $collect->getTable(),

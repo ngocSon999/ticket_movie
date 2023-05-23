@@ -16,9 +16,4 @@ class SaveTrace extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function targetable(): MorphTo
-    {
-        return $this->morphTo();
-    }
 }

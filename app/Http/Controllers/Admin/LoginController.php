@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\SentinelService;
+use App\Http\Services\SentinelServiceInterface;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Illuminate\Contracts\Foundation\Application as ContractApplication;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use \Illuminate\Contracts\Foundation\Application as ContractApplication;
 
 class LoginController extends Controller
 {
-    protected SentinelService $sentinelService;
+    protected SentinelServiceInterface $sentinelService;
 
     public function __construct(
-        SentinelService $sentinelService
+        SentinelServiceInterface $sentinelService
     )
     {
         $this->sentinelService = $sentinelService;

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
+use App\Http\Services\Impl\SaveTraceService;
 use App\Models\Category;
-use App\Services\SaveTraceService;
 
 class CategoryObserver
 {
@@ -18,7 +18,6 @@ class CategoryObserver
      */
     public function created(Category $category): void
     {
-
         $this->saveTrace->saveTraces($category, 'create');
     }
 
@@ -36,21 +35,5 @@ class CategoryObserver
     public function deleted(Category $category): void
     {
         $this->saveTrace->saveTraces($category, 'delete');
-    }
-
-    /**
-     * Handle the Category "restored" event.
-     */
-    public function restored(Category $category): void
-    {
-        //
-    }
-
-    /**
-     * Handle the Category "force deleted" event.
-     */
-    public function forceDeleted(Category $category): void
-    {
-        //
     }
 }

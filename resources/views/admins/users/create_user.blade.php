@@ -3,10 +3,10 @@
 @endsection
 @section('content')
     @if(!empty($user))
-        <form class="mt-4" action="{{ route('users.update', ['id' => $user->id]) }}" method="POST">
+        <form class="mt-4" action="{{ route('admin.users.update', ['id' => $user->id]) }}" method="POST">
             @method('PUT')
             @else
-                <form class="mt-4" action="{{ route('users.create') }}" method="POST">
+                <form class="mt-4" action="{{ route('admin.users.create') }}" method="POST">
                     @endif
                     @csrf
                     <div class="mb-3">
