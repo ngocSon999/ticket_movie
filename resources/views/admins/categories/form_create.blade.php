@@ -3,10 +3,10 @@
 @endsection
 @section('content')
     @if(!empty($category))
-        <form class="mt-4" action="{{ route('categories.update', ['id' => $category->id]) }}" method="POST">
+        <form class="mt-4" action="{{ route('admin.categories.update', ['id' => $category->id]) }}" method="POST">
             @method('PUT')
             @else
-                <form class="mt-4" action="{{ route('categories.store') }}" method="POST">
+                <form class="mt-4" action="{{ route('admin.categories.store') }}" method="POST">
                     @endif
                     @csrf
                     <div class="mb-3">

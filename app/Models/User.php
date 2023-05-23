@@ -46,8 +46,8 @@ class User extends CartalystUser
         'is_super_admin' => 'boolean',
     ];
 
-    public static function getTableName(): string
-    {
-        return (new self())->getTable();
-    }
+//    public static function getTableName(): string
+//    {
+//        return (new self())->getTable();
+//    }
 }

@@ -44,7 +44,7 @@
             },
 
             ajax: {
-                url: '{{ route('categories.list') }}',
+                url: '{{ route('admin.categories.list') }}',
             },
             columns: [
                 {
@@ -74,10 +74,10 @@
                 {
                     data: 'id', orderable: false,
                     render: function (colValue, type, row) {
-                        let deleteUrl = '{{ route('categories.delete', ':id') }}';
+                        let deleteUrl = '{{ route('admin.categories.delete', ':id') }}';
                         deleteUrl = deleteUrl.replace(':id', colValue);
 
-                        let editUrl = '{{ route('categories.edit', ':id') }}';
+                        let editUrl = '{{ route('admin.categories.edit', ':id') }}';
                         editUrl = editUrl.replace(':id', colValue);
 
                         let resultHtml = `<a class="btn btn-warning btn-sm" href="${editUrl}">Sửa</a>

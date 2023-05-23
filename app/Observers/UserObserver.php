@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
+use App\Http\Services\Impl\SaveTraceService;
 use App\Models\User;
-use App\Services\SaveTraceService;
 
 class UserObserver
 {
@@ -49,21 +49,5 @@ class UserObserver
     public function deleted(User $user): void
     {
         $this->saveTrace->saveTraces($user, 'delete');
-    }
-
-    /**
-     * Handle the User "restored" event.
-     */
-    public function restored(User $user): void
-    {
-        //
-    }
-
-    /**
-     * Handle the User "force deleted" event.
-     */
-    public function forceDeleted(User $user): void
-    {
-        //
     }
 }

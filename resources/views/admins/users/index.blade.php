@@ -84,7 +84,7 @@
             },
 
             ajax: {
-                url: '{{ route('users.list') }}',
+                url: '{{ route('admin.users.list') }}',
                 data: function (d) {
                     d.user_name = $('#user_name').val();
                     d.email = $('#email').val();
@@ -135,18 +135,17 @@
                         if (mm < 10) {
                             mm = '0' + mm
                         }
-                        const formattedToday = dd + '/' + mm + '/' + yyyy;
 
-                        return formattedToday
+                        return dd + '/' + mm + '/' + yyyy
                     }
                 },
                 {
                     data: 'id', orderable: false,
                     render: function (colValue, type, row) {
-                        let deleteUrl = '{{ route('users.delete', ':id') }}';
+                        let deleteUrl = '{{ route('admin.users.delete', ':id') }}';
                         deleteUrl = deleteUrl.replace(':id', colValue);
 
-                        let editUrl = '{{ route('users.edit', ':id') }}';
+                        let editUrl = '{{ route('admin.users.edit', ':id') }}';
                         editUrl = editUrl.replace(':id', colValue);
                         let resultHtml = '<div class="actions">';
                         if (row?.roles?.length > 0) {

@@ -1,29 +1,22 @@
 <?php
-namespace App\Services;
+namespace App\Http\Services\Impl;
 
-use App\Repositories\UserRepository;
+use App\Http\Services\SentinelServiceInterface;
+use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Cartalyst\Sentinel\Users\UserInterface;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 
-class SentinelService
+class SentinelService implements SentinelServiceInterface
 {
-    protected UserRepository $userRepository;
-    public function __construct(UserRepository $userRepository)
+    public function authenticate(Request $request): UserInterface|bool
     {
-        $this->userRepository = $userRepository;
-    }
-
-    public function authenticate($request): UserInterface|bool
-    {
-        $credentials = [
+        return $this->userRepository->userLogin([
             'email' => $request->email,
             'password' => $request->password,
-        ];
-        $remember = (bool)$request->remember;
-
-        return $this->userRepository->userLogin($credentials, $remember);
+        ], (bool) $request->remember);
     }
 
     public function getRoles()
@@ -36,35 +29,31 @@ class SentinelService
         return Sentinel::getRoleRepository()->get();
     }
 
-    public function createUser($request)
+    public function createUser(Request $request): void
     {
-        $credentials = [
-          'first_name' => $request->first_name,
-          'last_name' => $request->last_name,
-          'email' => $request->email,
-          'phone' => $request->phone,
-          'password' => $request->password,
-        ];
-        $userAdmin = Sentinel::registerAndActivate($credentials);
+        $userAdmin = Sentinel::registerAndActivate([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => $request->password,
+        ]);
+
         $userAdmin->roles()->attach(Sentinel::findRoleById($request->role));
     }
-    public function getAllUser($slug = null)
+    public function getAllUser(?string $slug)
     {
         if (!empty($slug)) {
-            $users = Sentinel::getUserRepository()->whereHas('roles', function ($query) use ($slug) {
+            return Sentinel::getUserRepository()->whereHas('roles', function ($query) use ($slug) {
                 $query->where('slug', $slug);
             })->get();
-
-            return $users;
-        }else{
-            $users = Sentinel::getUserRepository()->whereHas('roles', function ($query) use ($slug) {
-                $query->where('slug','!=', 'super-admin');
-            })->get();
-
-            return $users;
         }
+
+        return Sentinel::getUserRepository()->whereHas('roles', function ($query) use ($slug) {
+            $query->where('slug','!=', 'super-admin');
+        })->get();
     }
-    public function getDataUserAndSearch($request = null)
+    public function getDataUserAndSearch(Request $request): array
     {
         $orderSorts = $request->input('order');
         $dataColumns = $request->input('columns');
@@ -115,7 +104,6 @@ class SentinelService
             $userQuery->whereDate('created_at', '<=', $endDate);
         }
 
-
         /** @var LengthAwarePaginator $usersPaginate */
         $usersPaginate = $userQuery->paginate($length, '*', 'users', $page);
         $recordsTotal = $usersPaginate->total();
@@ -127,12 +115,12 @@ class SentinelService
         ];
     }
 
-    public function getUserById($id)
+    public function getUserById($id): User
     {
         return Sentinel::findById($id);
     }
 
-    public function updateUserById($request, $id)
+    public function updateUserById($request, $id): void
     {
         $user = Sentinel::findById($id);
         $credentials = [
@@ -141,16 +129,18 @@ class SentinelService
             'email' => $request->email,
             'phone' => $request->phone,
         ];
+
         if (!empty($request->password)) {
             $credentials['password'] = $request->password;
         }
+
         $user = Sentinel::update($user, $credentials);
         if ($request->role) {
             $roleUpdate = Sentinel::findRoleById($request->role);
             $user->roles()->sync($roleUpdate);
         }
     }
-    public function deleteUserById($id)
+    public function deleteUserById($id): void
     {
         $user = Sentinel::findById($id);
         $user->delete();

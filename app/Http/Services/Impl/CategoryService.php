@@ -1,31 +1,30 @@
 <?php
-namespace App\Services;
+namespace App\Http\Services\Impl;
 
+use App\Http\Repositories\CategoryRepoInterface;
+use App\Http\Services\CategoryServiceInterface;
 use App\Models\Category;
-use App\Repositories\CategoryRepository;
 use Illuminate\Support\Str;
 
-class CategoryService
+class CategoryService implements CategoryServiceInterface
 {
-    protected CategoryRepository $categoryRepository;
+    protected CategoryRepoInterface $categoryRepository;
 
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(CategoryRepoInterface $categoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function store($request = null)
+    public function store($request)
     {
-        $data = [
+        return $this->categoryRepository->store([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
-        ];
-
-        return $this->categoryRepository->store($data);
+        ]);
     }
 
 
-    public function getList($request = null): array
+    public function getList($request): array
     {
         $orderSorts = $request->input('order');
         $dataColumns = $request->input('columns');
@@ -34,14 +33,13 @@ class CategoryService
         $length = $request->input('length', 10);
         $page = floor($start / $length) + 1;
 
-        /** @var Category $categoryQuery */
-        $categoryQuery = $this->categoryRepository->model();
+        $categoryQuery = Category::whereNotNull('id');
         foreach ($orderSorts as $orderSort) {
             $orderSortColumn = $orderSort['column'];
             $dir = $orderSort['dir'];
             $field = $dataColumns[$orderSortColumn]['data'];
             if (!empty($field) && !empty($dir)) {
-                $categoryQuery = $categoryQuery::orderBy($field, $dir);
+                $categoryQuery->orderBy($field, $dir);
             }
         }
 
