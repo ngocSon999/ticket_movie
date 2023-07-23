@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MovieRequest extends FormRequest
 {
@@ -22,11 +23,23 @@ class MovieRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->id;
         return [
-            'name' => sprintf('required|max:255|unique:movies,name, %s', $this->id),
+            'name' => sprintf('required|max:255|unique:movies,name, %s', $id),
             'description' => 'max:500',
             'age_limit' => 'required|max:2',
-            'banner' => 'required|max:255',
+            "banner" => [
+                'max:255',
+                'file',
+                'mimes:png,gif,jpeg,jpg,pdf,doc',
+                Rule::requiredIf(function () use ($id) {
+                    if ($id) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                })
+            ],
             'trailer' => 'max:255',
             'director_id' => 'nullable|integer|',
             'start_date' => 'nullable|date|',
