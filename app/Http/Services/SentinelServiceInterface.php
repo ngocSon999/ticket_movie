@@ -6,7 +6,7 @@ use App\Models\User;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Http\Request;
 
-interface SentinelServiceInterface
+interface SentinelServiceInterface extends BaseServiceInterface
 {
     public function authenticate(Request $request): UserInterface|bool;
 
@@ -15,6 +15,8 @@ interface SentinelServiceInterface
     public function getAllRoles();
 
     public function createUser(Request $request): void;
+
+    public function editUser($id);
     public function getAllUser(?string $slug);
     public function getDataUserAndSearch(Request $request): array;
 

@@ -13,7 +13,6 @@ class SaveTraceService implements SaveTraceServiceInterface
             'user_id' => Sentinel::getUser()?->id,
             'record_id' => $collect->id,
             'table_name' => $collect->getTableName(),
-            'table_type' => $collect->getTable(),
             'action' => $action,
         ];
 

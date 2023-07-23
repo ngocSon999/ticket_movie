@@ -33,8 +33,8 @@ class RoleSeeder extends Seeder
             ]
         ],
         [
-            'slug' => 'nhanvien',
-            'name' => 'nhanvien',
+            'slug' => 'nhan-vien',
+            'name' => 'Nhân viên',
             'permissions' => [
                 'dashboard.index' => true,
                 'users.list' => true,

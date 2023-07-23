@@ -12,4 +12,8 @@ interface UserRepoInterface
      * @return mixed
      */
     public function userLogin($credentials, $remember): mixed;
+
+    public function createUser($credentials, $role);
+
+    public function editUser($id);
 }

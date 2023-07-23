@@ -10,9 +10,13 @@
                     @endif
                     @csrf
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">First name <span class="color-red">*</span></label>
-                        <input type="text" maxlength="100" class="form-control" name="first_name"
-                               value="{{ old('first_name') ?? !empty($user->first_name) ? $user->first_name : '' }}">
+                        <label for="" class="form-label">First name <span class="color-red">*</span></label>
+                        @if(!empty($user))
+                            <input type="text" maxlength="100" class="form-control" name="first_name"
+                                   value="{{ old('first_name') ?? $user->first_name}}">
+                        @else
+                            <input type="text" maxlength="100" class="form-control" name="first_name" value="{{ old('first_name') }}">
+                        @endif
                         @if ($errors->has('first_name'))
                             @foreach ($errors->get('first_name') as $error)
                                 <p class="form-message">{{ $error }}</p>
@@ -20,9 +24,13 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Last name <span class="color-red">*</span></label>
-                        <input type="text" maxlength="100" class="form-control" name="last_name"
-                               value="{{ old('last_name') ?? !empty($user->last_name) ? $user->last_name : ''}}">
+                        <label for="" class="form-label">Last name <span class="color-red">*</span></label>
+                        @if(!empty($user))
+                            <input type="text" maxlength="100" class="form-control" name="last_name"
+                                   value="{{ old('last_name') ?? $user->last_name }}">
+                        @else
+                            <input type="text" maxlength="100" class="form-control" name="last_name" value="{{ old('last_name') }}">
+                        @endif
                         @if ($errors->has('last_name'))
                             @foreach ($errors->get('last_name') as $error)
                                 <p class="form-message">{{ $error }}</p>
@@ -30,9 +38,13 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email <span class="color-red">*</span></label>
-                        <input type="email" maxlength="150" class="form-control" name="email"
-                               value="{{ old('email') ?? !empty($user->email) ? $user->email : ''}}">
+                        <label for="" class="form-label">Email <span class="color-red">*</span></label>
+                        @if(!empty($user))
+                            <input type="email" maxlength="150" class="form-control" name="email"
+                                   value="{{ old('email') ?? $user->email }}">
+                        @else
+                            <input type="email" maxlength="150" class="form-control" name="email" value="{{ old('email') }}">
+                        @endif
                         @if ($errors->has('email'))
                             @foreach ($errors->get('email') as $error)
                                 <p class="form-message">{{ $error }}</p>
@@ -40,9 +52,13 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Phone <span class="color-red">*</span></label>
-                        <input type="text" maxlength="11" class="form-control" name="phone"
-                               value="{{ old('phone') ?? !empty($user->phone) ? $user->phone : ''}}">
+                        <label for="" class="form-label">Phone <span class="color-red">*</span></label>
+                        @if(!empty($user))
+                            <input type="text" maxlength="11" class="form-control" name="phone"
+                                   value="{{ old('phone') ?? $user->phone }}">
+                        @else
+                            <input type="text" maxlength="11" class="form-control" name="phone" value="{{ old('phone') }}">
+                        @endif
                         @if ($errors->has('phone'))
                             @foreach ($errors->get('phone') as $error)
                                 <p class="form-message">{{ $error }}</p>
@@ -51,7 +67,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password
-                            @if(!isset($user))
+                            @if(empty($user))
                                 <span class="color-red">*</span>
                             @endif
                         </label>

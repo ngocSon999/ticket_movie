@@ -8,10 +8,17 @@
         </ul>
     </li>
     <li class="sidebar-item">
-        <a class="color-sidebar" href="#">Quản lý danh mục fiml</a>
+        <a class="color-sidebar" href="#">Quản lý danh mục phim</a>
         <ul class="sidebar-list">
             <li class="sidebar-link color-sidebar"><a class="color-sidebar" href="{{ route('admin.categories.form') }}">Thêm danh mục film</a></li>
             <li class="sidebar-link"><a class="color-sidebar" href="{{ route('admin.categories.index') }}">Danh sách danh mục film</a></li>
+        </ul>
+    </li>
+    <li class="sidebar-item">
+        <a class="color-sidebar" href="#">Quản lý phim</a>
+        <ul class="sidebar-list">
+            <li class="sidebar-link color-sidebar"><a class="color-sidebar" href="{{ route('admin.movies.form') }}">Thêm phim mới</a></li>
+            <li class="sidebar-link"><a class="color-sidebar" href="{{ route('admin.movies.index') }}">Danh sách phim</a></li>
         </ul>
     </li>
 </ul>

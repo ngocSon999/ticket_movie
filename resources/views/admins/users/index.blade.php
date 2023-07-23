@@ -7,7 +7,6 @@
             margin-top: 40px;
         }
     </style>
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
     <div class="row mb-4">
@@ -110,6 +109,7 @@
                 {data: 'phone'},
                 {
                     data: 'roles',
+                    orderable: false,
                     render: function (colValue, type, row) {
                         let resultHTML = '<ul>';
                         if (row?.roles?.length > 0) {

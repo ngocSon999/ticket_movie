@@ -49,11 +49,10 @@ class UserController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Tạo tài khoản thành công');
     }
 
-
     public function edit(int $id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $user = $this->sentinelService->getUserById($id);
-        $roles = $this->sentinelService->getRoles();
+        $user = $this->sentinelService->editUser($id);
+        $roles = $this->sentinelService->getAllRoles();
 
         return view('admins.users.create_user', compact('user','roles'));
     }

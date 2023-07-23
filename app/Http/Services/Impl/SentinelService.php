@@ -1,16 +1,21 @@
 <?php
 namespace App\Http\Services\Impl;
 
+use App\Http\Repositories\UserRepoInterface;
 use App\Http\Services\SentinelServiceInterface;
 use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Carbon;
 
-class SentinelService implements SentinelServiceInterface
+class SentinelService extends BaseService implements SentinelServiceInterface
 {
+    protected UserRepoInterface $userRepository;
+
+    public function __construct(UserRepoInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     public function authenticate(Request $request): UserInterface|bool
     {
         return $this->userRepository->userLogin([
@@ -31,15 +36,20 @@ class SentinelService implements SentinelServiceInterface
 
     public function createUser(Request $request): void
     {
-        $userAdmin = Sentinel::registerAndActivate([
+        $credentials = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => $request->password,
-        ]);
+        ];
+        $role = $request->role;
+        $this->userRepository->createUser($credentials, $role);
+    }
 
-        $userAdmin->roles()->attach(Sentinel::findRoleById($request->role));
+    public function editUser($id)
+    {
+        return $this->userRepository->editUser($id);
     }
     public function getAllUser(?string $slug)
     {
@@ -55,64 +65,51 @@ class SentinelService implements SentinelServiceInterface
     }
     public function getDataUserAndSearch(Request $request): array
     {
-        $orderSorts = $request->input('order');
-        $dataColumns = $request->input('columns');
-
-        $start = $request->input('start', 1);
-        $length = $request->input('length', 10);
-        $page = floor($start / $length) + 1;
-
-        $search = $request->input('search');
-
-        /** @var LengthAwarePaginator $userQuery */
-        $userQuery = Sentinel::getUserRepository()->with(['roles']);
-
-        if (!empty($search['value'])) {
-            $userQuery
-                ->orWhere('email', 'like', "%{$search['value']}%")
-                ->orWhere('phone', 'like', "%{$search['value']}%")
-                ->orWhere('first_name', 'like', "%{$search['value']}%")
-                ->orWhere('last_name', 'like', "%{$search['value']}%");
-        };
-
-        foreach ($orderSorts as $orderSort) {
-            $orderSortColumn = $orderSort['column'];
-            $dir = $orderSort['dir'];
-            $field = $dataColumns[$orderSortColumn]['data'];
-            if (!empty($field) && !empty($dir)) {
-                $userQuery->orderBy($field, $dir);
-            }
-        }
-        if($request->input('user_name')) {
-            $userQuery->where('first_name', 'like', "%{$request->input('user_name')}%");
-        }
-        if($request->input('email')) {
-            $userQuery->where('email', $request->input('email'));
-        }
+        $request->merge([
+            'filter' => [
+                'searchColumns' => [
+                    'email',
+                    'phone',
+                    'first_name',
+                    'last_name',
+                ],
+//                'inputFields' => [
+//                    'first_name' => $request->user_name,
+//                    'last_name' => $request->user_name,
+//                    'email' => $request->email,
+//                ],
+                'where_like' => [
+                    'first_name' => $request->user_name,
+                    'last_name' => $request->user_name,
+                    'email' => $request->email,
+                ],
+                'start_date' => [
+                    'created_at' => $request->start_date,
+                ],
+                'end_date' => [
+                    'created_at' => $request->end_date,
+                ],
+                'where_id' => [
+                    'role_id' => $request->role_id
+                ],
+            ],
+        ]);
         if(!empty($request->input('role_id'))) {
-            $roleId = $request->input('role_id');
-            $userQuery->whereHas('roles', function ($query) use ($roleId) {
-                $query->where('id', $roleId);
-            });
+            $request->merge([
+                'filter' => [
+                    'whereHas' => [
+                        'roles' => [
+                            'role_id' => $request->role_id
+                        ]
+                    ]
+                ],
+            ]);
         }
-        if(!empty($request->input('start_date'))) {
-            $startDate = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
-            $userQuery->whereDate('created_at', '>=', $startDate);
-        }
-        if(!empty($request->input('end_date'))) {
-            $endDate = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
-            $userQuery->whereDate('created_at', '<=', $endDate);
-        }
+        $request->merge([
+            'withRelation' => ['roles']
+        ]);
 
-        /** @var LengthAwarePaginator $usersPaginate */
-        $usersPaginate = $userQuery->paginate($length, '*', 'users', $page);
-        $recordsTotal = $usersPaginate->total();
-
-        return [
-            'data' => $usersPaginate->all(),
-            'recordsTotal' => $recordsTotal,
-            'recordsFiltered' => $recordsTotal
-        ];
+        return $this->getDataBuilder($request, User::class);
     }
 
     public function getUserById($id): User

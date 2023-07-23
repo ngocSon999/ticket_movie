@@ -4,7 +4,7 @@ namespace App\Http\Services;
 
 use Illuminate\Http\Request;
 
-interface CategoryServiceInterface
+interface CategoryServiceInterface extends BaseServiceInterface
 {
     public function store(Request $request);
 
