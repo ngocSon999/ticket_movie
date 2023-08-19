@@ -2,12 +2,8 @@
 @section('title', 'Nhân viên')
 @section("style")
     <style>
-        table.dataTable.no-footer {
-            border: 1px solid rgba(0, 0, 0, 0.3);
-            margin-top: 40px;
-        }
+
     </style>
-    <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 @endsection
 @section('content')
     <div class="row mb-4">
@@ -39,14 +35,14 @@
             <input name="end_date" type="datetime-local" id="end_date" class="form-control">
         </div>
     </div>
-    <div class="row m-4">
-        <div class="col-3">
+    <div class="row m-4 justify-content-center">
+        <div class="col-4">
             <button class="btn btn-success btn-sm me-2" id="search-user">Tìm kiếm</button>
             <button class="btn btn-primary btn-sm" id="reset-search-user">Làm mới</button>
         </div>
     </div>
     <div class="row">
-        <table id="myTableUser" class="display">
+        <table id="myTableUser" style="width: 100%; border-collapse: collapse;">
             <thead>
             <tr>
                 <th>Id</th>
@@ -110,6 +106,7 @@
                 {data: 'phone'},
                 {
                     data: 'roles',
+                    orderable: false,
                     render: function (colValue, type, row) {
                         let resultHTML = '<ul>';
                         if (row?.roles?.length > 0) {
@@ -175,6 +172,7 @@
             $('#email').val('');
             $('#start_date').val('');
             $('#end_date').val('');
+            $('#role_id').val('');
             tableUser.draw();
         })
     </script>

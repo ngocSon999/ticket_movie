@@ -10,13 +10,22 @@
 @endif
 
 @if(session('success'))
-    <div class="alert alert-success text-center"> {{ session('success') }} </div>
+    <div class="alert alert-success text-center">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 @endif
 @if(session('warning'))
-    <div class="alert alert-warning text-center"> {{ session('warning') }} </div>
+    <div class="alert alert-warning text-center">
+        {{ session('warning') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 @endif
 @if(session('info'))
-    <div class="alert alert-info text-center"> {{ session('info') }} </div>
+    <div class="alert alert-info text-center">
+        {{ session('info') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 @endif
 @if(session('danger'))
     <div class="text-center alert alert-danger alert-dismissible fade show" role="alert">

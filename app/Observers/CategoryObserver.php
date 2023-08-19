@@ -2,14 +2,14 @@
 
 namespace App\Observers;
 
-use App\Http\Services\Impl\SaveTraceService;
+use App\Http\Services\SaveTraceServiceInterface;
 use App\Models\Category;
 
 class CategoryObserver
 {
-    protected SaveTraceService $saveTrace;
+    protected SaveTraceServiceInterface $saveTrace;
 
-    public function __construct(SaveTraceService $saveTrace)
+    public function __construct(SaveTraceServiceInterface $saveTrace)
     {
         $this->saveTrace = $saveTrace;
     }

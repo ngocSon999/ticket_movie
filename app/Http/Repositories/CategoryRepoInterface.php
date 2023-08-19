@@ -2,15 +2,9 @@
 
 namespace App\Http\Repositories;
 
-interface CategoryRepoInterface
+use Illuminate\Database\Eloquent\Collection;
+
+interface CategoryRepoInterface extends BaseRepoInterface
 {
-    public function model();
-
-    public function store(array $data);
-
-    public function getById(int $id);
-
-    public function update(array $data, int $id);
-
-    public function delete(int $id): void;
+    public function getList(): Collection;
 }
