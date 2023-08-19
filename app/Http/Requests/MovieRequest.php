@@ -40,7 +40,7 @@ class MovieRequest extends FormRequest
                     }
                 })
             ],
-            'trailer' => 'max:255',
+            'trailer' => 'max:700',
             'director_id' => 'nullable|integer|',
             'start_date' => 'nullable|date|',
             'end_date' => 'nullable|date|',

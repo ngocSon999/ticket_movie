@@ -21,19 +21,20 @@
         </div>
     </div>
     <div class="row mt-4 mb-4 justify-content-center">
-        <div class="col-3">
+        <div class="col-4">
             <button class="btn btn-success btn-sm me-2" id="search-movie">Tìm kiếm</button>
             <button class="btn btn-primary btn-sm" id="reset-search-movie">Làm mới</button>
         </div>
     </div>
     <div class="row mt-4">
-        <table id="my-table-movie" class="display">
+        <table id="my-table-movie" style="width: 100%">
             <thead>
             <tr>
-                <th>Id</th>
+                <th>STT</th>
                 <th>Tên phim</th>
                 <th>Mô tả</th>
                 <th>Banner</th>
+                <th>Slide</th>
                 <th>Ngày tạo</th>
                 <th>Action</th>
             </tr>
@@ -92,6 +93,19 @@
                     }
                 },
                 {
+                    data: 'add_to_slide',
+                    render: function (colValue, type, row) {
+                        let html = '';
+                        if (colValue === 1) {
+                            html = `<input class="add-to-slide" data-movie_id="${row.id}" style="width: 20px; height: 20px" type="checkbox" checked value="${colValue}">`
+                        } else {
+                            html = `<input class="add-to-slide" data-movie_id="${row.id}" style="width: 20px; height: 20px" type="checkbox" value="${colValue}">`
+                        }
+
+                        return html;
+                    }
+                },
+                {
                     data: 'created_at',
                     render: function (colValue) {
                         const today = new Date(colValue);
@@ -135,5 +149,40 @@
             $('#end_date').val('');
             tableMovie.draw();
         })
+
+        $(document).on('click', '.add-to-slide', function () {
+            let selectToSide = $(this).val();
+            let selectValue = null;
+            if (selectToSide == 1) {
+                alert('remove movie to slide?')
+                selectValue = 0
+            }
+            if (selectToSide == 0) {
+                alert('add movie to slide?')
+                selectValue = 1
+            }
+            $.ajax({
+                url: '{{ route('web.movie.add-to-slide') }}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                data: {
+                    id: $(this).data('movie_id'),
+                    selectValue:selectValue
+                },
+                success: function (res) {
+                    if (res.code === 0) {
+                        alert(res.message)
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000)
+                    }
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            })
+        });
     </script>
 @endsection

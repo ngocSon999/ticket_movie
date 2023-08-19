@@ -65,7 +65,7 @@ class SentinelService extends BaseService implements SentinelServiceInterface
     }
     public function getDataUserAndSearch(Request $request): array
     {
-        $request->merge([
+        $filter = [
             'filter' => [
                 'searchColumns' => [
                     'email',
@@ -73,11 +73,11 @@ class SentinelService extends BaseService implements SentinelServiceInterface
                     'first_name',
                     'last_name',
                 ],
-//                'inputFields' => [
-//                    'first_name' => $request->user_name,
-//                    'last_name' => $request->user_name,
-//                    'email' => $request->email,
-//                ],
+                'inputFields' => [
+                    'first_name' => $request->user_name,
+                    'last_name' => $request->user_name,
+                    'email' => $request->email,
+                ],
                 'where_like' => [
                     'first_name' => $request->user_name,
                     'last_name' => $request->user_name,
@@ -89,21 +89,18 @@ class SentinelService extends BaseService implements SentinelServiceInterface
                 'end_date' => [
                     'created_at' => $request->end_date,
                 ],
-                'where_id' => [
-                    'role_id' => $request->role_id
-                ],
             ],
-        ]);
+        ];
+
+        $request->merge($filter);
+
         if(!empty($request->input('role_id'))) {
-            $request->merge([
-                'filter' => [
-                    'whereHas' => [
-                        'roles' => [
-                            'role_id' => $request->role_id
-                        ]
-                    ]
-                ],
-            ]);
+            $filter['filter']['whereHas'] = [
+                'roles' => [
+                    'role_id' => $request->role_id
+                ]
+            ];
+            $request->merge($filter);
         }
         $request->merge([
             'withRelation' => ['roles']

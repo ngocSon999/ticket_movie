@@ -41,7 +41,7 @@ class BaseService implements BaseServiceInterface
                 }
             });
         }
-        // Tìm kiếm với các unput bên ngoài datatable
+        // Tìm kiếm với các input bên ngoài datatable
         if (isset($request->filter['inputFields'])) {
             $inputFields = $request->filter['inputFields'];
             $dataQuery->where(function ($query) use ($inputFields) {
@@ -91,7 +91,7 @@ class BaseService implements BaseServiceInterface
             $dataQuery->where(function ($query) use ($ids) {
                 foreach ($ids as $key => $value) {
                     if (!empty($value)) {
-                        $query->whereDate($key,'<=', $value);
+                        $query->where($key, $value);
                     }
                 }
             });
@@ -111,7 +111,6 @@ class BaseService implements BaseServiceInterface
                 });
             }
         }
-
         $dataPaginate = $dataQuery->paginate($length, '*', 'lists', $page);
         $recordsTotal = $dataPaginate->total();
 

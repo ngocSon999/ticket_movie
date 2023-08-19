@@ -73,7 +73,11 @@
 
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Banner<span
-                                class="color-red">*</span></label>
+                                class="color-red">*</span><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/i18n/jquery-ui-timepicker-vi.js"></script></label>
                         <input type="file" class="form-control" name="banner"
                                @if(!empty($movie))
                                    value="{{ old('banner') ?? $movie->banner }}"
@@ -88,7 +92,7 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Trailer<span
                                 class="color-red">*</span></label>
-                        <input type="text" maxlength="255" class="form-control" name="trailer"
+                        <input type="text" class="form-control" name="trailer"
                                @if(!empty($movie))
                                    value="{{ old('trailer') ?? $movie->trailer }}"
                                @else
@@ -139,7 +143,7 @@
                                 yearRange: "1900:{{ date('Y') }}",
                                 showButtonPanel: true,
                                 showAnim: "fadeIn",
-                                // numberOfMonths: 2,
+                                // numberOfMonths: 10,
                                 showOtherMonths: true,
                                 selectOtherMonths: true,
                             });

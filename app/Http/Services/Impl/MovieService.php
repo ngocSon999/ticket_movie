@@ -123,4 +123,9 @@ class MovieService extends BaseService implements MovieServiceInterface
     {
         $this->movieRepository->delete($id,  Movie::class);
     }
+
+    public function updateToSlide($input): void
+    {
+        $this->movieRepository->updateToSlide($input);
+    }
 }

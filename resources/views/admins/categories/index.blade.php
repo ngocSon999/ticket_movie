@@ -7,7 +7,7 @@
 @endsection
 @section('content')
     <div class="row">
-        <table id="myTableCategory" class="display">
+        <table id="myTableCategory" style="width: 100%">
             <thead>
             <tr>
                 <th>Id</th>

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('age_limit', length: 2);
             $table->string('banner', length: 255);
             $table->string('trailer', length: 255)->nullable();
+            $table->boolean('add_to_slide')->nullable()->default(0);
             $table->unsignedBigInteger('director_id')->nullable()->comment('giám đốc SX');
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
