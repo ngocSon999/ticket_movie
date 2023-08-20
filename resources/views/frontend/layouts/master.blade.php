@@ -52,10 +52,11 @@
             <div class="row">
                 <x-header />
             </div>
-            <div class="container mt-4">
-                <div class="row">
-                    @yield('content')
-                </div>
+            <div class="row">
+                @include('frontend.layouts.message')
+            </div>
+            <div class="row mt-4">
+                @yield('content')
             </div>
             <div class="row">
                 @include('frontend.layouts.footer')
@@ -65,12 +66,20 @@
 
     <script>
         $(document).ready(function () {
-            $('#menuDrop').on('mouseenter', function () {
-                $('#menu-category').show()
+            $('.nav-item.dropdown').on('mouseenter', function () {
+                $(this).find('ul').show()
             })
-            $('#menu-category').on('mouseleave', function () {
-                $('#menu-category').hide();
+            $('.nav-item.dropdown').find('ul').on('mouseleave', function () {
+                $(this).hide();
             });
+
+            setInterval(function () {
+                $('#header').toggleClass('active')
+            }, 300);
+
+            $('.mobile-button').on('click', function () {
+                $('.collapse:not(.show)').toggle()
+            })
         });
     </script>
 @yield('js')

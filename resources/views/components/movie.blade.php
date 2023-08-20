@@ -39,10 +39,6 @@
         transition: all 0.2s linear;
         background-color: rgba(0, 0, 0, 0.1);
     }
-    .movie-slider .slick-arrow:hover {
-        background-color: #2cccff;
-        color: white;
-    }
     .movie-slider .slick-prev {
         left: 2px;
         color: red;
@@ -78,7 +74,7 @@
     }
 
     .play-movie {
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(0, 0, 0, 0.2);
         position: absolute;
         top: 0;
         width: 100%;
@@ -92,6 +88,7 @@
         position: absolute;
         top: 30%;
         left: 50%;
+        transform: translateX(-50%);
         font-size: 40px;
         width: 50px;
         height: 50px;
@@ -99,16 +96,19 @@
         border: 1px solid #5d4c44;
         text-align: center;
         padding-top: 4px;
+        cursor: pointer;
     }
     .play-movie div {
         position: absolute;
         bottom: 0;
         width: 100%;
     }
+    .play-movie a i {
+        color: #3abbbd !important;
+    }
     .image-item:hover .play-movie {
         display: block;
     }
-
     .play-movie .movie-title {
         font-size: 24px;
         display: block;
@@ -145,12 +145,12 @@
                 />
                 <div class="play-movie" data-url="{{ $item->trailer }}">
                     @if(!empty($item->trailer))
-                        <p><i class="fa-solid fa-play"></i></p>
+                        <p><i class="fa-solid fa-play" title="Xem trailer"></i></p>
                     @endif
                     <p class="movie-title">{{ $item->name }}</p>
                     <div class="d-flex justify-content-center">
                         <a href="{{ route('web.movie.show', ['id' => $item->id]) }}" class="btn btn-danger">Xem chi tiết</a>
-                        <a href="" class="btn btn-danger ms-4">Mua vé</a>
+                        <a href="" class="btn btn-danger ms-4"><i class="fas fa-phone me-1 text-secondary"></i>Mua vé</a>
                     </div>
                 </div>
             </div>

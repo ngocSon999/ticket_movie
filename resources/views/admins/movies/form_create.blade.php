@@ -12,6 +12,20 @@
                     @endif
                     @csrf
                     <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Danh mục phim<span
+                                class="color-red">*</span></label>
+                        <select class="form-control" name="category_id[]" id="">
+                            <option value="">Chọn danh mục phim</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}"
+                                @if(!empty($movie) && $movie->categories->contains($category->id))
+                                    selected
+                                @endif
+                                >{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Tên phim<span
                                 class="color-red">*</span></label>
                         <input type="text" maxlength="100" class="form-control" name="name"
@@ -55,7 +69,7 @@
                                    value="{{ old('end_date') ?? $movie->end_date }}"
                                @else
                                    value="{{ old('end_date') }}"
-                               @endif
+                            @endif
                         >
                     </div>
 
@@ -72,12 +86,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Banner<span
-                                class="color-red">*</span><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/i18n/jquery-ui-timepicker-vi.js"></script></label>
+                        <label for="exampleInputEmail1" class="form-label">Banner
+                            <span class="color-red">*</span>
+                        </label>
                         <input type="file" class="form-control" name="banner"
                                @if(!empty($movie))
                                    value="{{ old('banner') ?? $movie->banner }}"

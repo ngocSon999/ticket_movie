@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Http\Repositories\BaseRepoInterface;
 use App\Http\Repositories\CategoryRepoInterface;
+use App\Http\Repositories\CustomerRepoInterface;
 use App\Http\Repositories\Impl\BaseRepository;
 use App\Http\Repositories\Impl\CategoryRepository;
+use App\Http\Repositories\Impl\CustomerRepository;
 use App\Http\Repositories\Impl\MovieRepository;
 use App\Http\Repositories\Impl\UserRepository;
 use App\Http\Repositories\MovieRepoInterface;
@@ -47,5 +49,6 @@ class AppServiceProvider extends ServiceProvider
         app()->bind(CategoryRepoInterface::class, CategoryRepository::class);
         app()->bind(UserRepoInterface::class, UserRepository::class);
         app()->bind(MovieRepoInterface::class, MovieRepository::class);
+        app()->bind(CustomerRepoInterface::class, CustomerRepository::class);
     }
 }

@@ -11,4 +11,10 @@ interface MovieRepoInterface extends BaseRepoInterface
     public function getMovie(): Collection;
 
     public function updateToSlide($input): void;
+
+    public function storeMovie(array $data, $model): mixed;
+
+    public function updateMovie(array $data, $id, $model): mixed;
+
+    public function getMovieById(int $id, $model): mixed;
 }

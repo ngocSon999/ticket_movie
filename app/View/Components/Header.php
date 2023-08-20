@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 
 class Header extends Component
 {
-    protected $categoryRepository;
+    protected CategoryRepoInterface $categoryRepository;
     /**
      * Create a new component instance.
      */
