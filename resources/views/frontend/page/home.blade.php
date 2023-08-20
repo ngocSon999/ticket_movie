@@ -3,16 +3,17 @@
 
 @endsection
 @section('content')
-<div class="container">
-    <div class="">
+    <div>
         <x-slider />
     </div>
     <div class="row text-center mt-2 mb-2">
-        <h1>MOVIE SELECTION</h1>
+        <h3>MOVIE SELECTION</h3>
     </div>
-    <div class="row">
+    <div>
         <x-movie />
     </div>
-</div>
+    <div class="row text-center mt-2 mb-2">
+        <h3>MOVIE HOT</h3>
+    </div>
 @endsection
 

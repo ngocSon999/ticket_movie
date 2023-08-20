@@ -4,7 +4,7 @@
  * Route admin
  */
 
-use App\Http\Controllers\Admin\MovieController as MovieController;
+use App\Http\Controllers\Admin\MovieController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LoginController;
@@ -15,7 +15,9 @@ use App\Http\Controllers\Admin\CategoryController;
  * Route web
  */
 use App\Http\Controllers\Frontend\WebController;
+use App\Http\Controllers\Frontend\FrontendLoginController;
 use App\Http\Controllers\Frontend\MovieController as FrontendMovieController;
+use App\Http\Controllers\Frontend\CustomerController as FrontendCustomerController;
 
 
 Route::get('/admin/login', [LoginController::class, 'login'])->name('admin.user.login');
@@ -60,10 +62,17 @@ Route::prefix('/admin')->middleware('sentinel.auth')->name('admin.')->group(func
  * register route web
  */
 Route::get('', [WebController::class, 'index'])->name('web.index');
+Route::get('/login', [FrontendLoginController::class, 'index'])->name('web.login');
+Route::post('/login', [FrontendLoginController::class, 'login'])->name('web.login.store');
+
+Route::get('/logout', [FrontendLoginController::class, 'logout'])->name('web.logout');
 Route::prefix('movies')->group(function () {
     Route::get('{id}', [FrontendMovieController::class, 'show'])->name('web.movie.show');
     Route::post('', [FrontendMovieController::class, 'addToSlide'])->name('web.movie.add-to-slide');
 });
 
-
+Route::prefix('customers')->group(function () {
+    Route::get('/create', [FrontendCustomerController::class, 'createForm'])->name('web.customers.form');
+    Route::post('/register', [FrontendCustomerController::class, 'store'])->name('web.customers.register');
+});
 

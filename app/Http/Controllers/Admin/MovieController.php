@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Repositories\CategoryRepoInterface;
 use App\Http\Requests\MovieRequest;
 use App\Http\Services\MovieServiceInterface;
 use Illuminate\Contracts\View\Factory;
@@ -14,15 +15,23 @@ use Illuminate\Http\Request;
 class MovieController extends BaseAdminController
 {
     protected MovieServiceInterface $movieService;
+    protected CategoryRepoInterface $categoryRepository;
 
-    public function __construct(MovieServiceInterface $movieService)
+
+    public function __construct(
+        MovieServiceInterface $movieService,
+        CategoryRepoInterface $categoryRepository,
+    )
     {
         $this->movieService = $movieService;
+        $this->categoryRepository =$categoryRepository;
     }
 
     public function createForm(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admins.movies.form_create');
+        $categories = $this->categoryRepository->getList();
+
+        return view('admins.movies.form_create', ['categories' => $categories]);
     }
 
     public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -45,8 +54,9 @@ class MovieController extends BaseAdminController
     public function edit($id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $movie = $this->movieService->getById($id);
+        $categories = $this->categoryRepository->getList();
 
-        return view('admins.movies.form_create', compact('movie'));
+        return view('admins.movies.form_create', compact('movie', 'categories'));
     }
     public function update(MovieRequest $request, $id): RedirectResponse
     {

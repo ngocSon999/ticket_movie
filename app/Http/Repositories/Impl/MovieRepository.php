@@ -28,4 +28,32 @@ class MovieRepository extends BaseRepository implements MovieRepoInterface
            'add_to_slide' =>  $input['selectValue']
         ]);
     }
+
+    public function storeMovie(array $data, $model): mixed
+    {
+        $categoryIds = $data['category_id'];
+        unset($data['category_id']);
+        $movie = $model::create($data);
+        $movie->categories()->attach($categoryIds);
+
+        return $movie;
+    }
+    public function updateMovie(array $data, $id, $model): mixed
+    {
+        $categoryIds = $data['category_id'];
+        unset($data['category_id']);
+        $movie = $model::find($id);
+        if (empty($movie)) {
+            abort(404);
+        }
+        $movie->update($data);
+        $movie->categories()->sync($categoryIds);
+
+        return $movie;
+    }
+
+    public function getMovieById(int $id, $model): mixed
+    {
+        return $model::where('id', $id)->with('categories')->first();
+    }
 }

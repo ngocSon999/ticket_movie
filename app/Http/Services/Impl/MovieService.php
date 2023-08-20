@@ -28,6 +28,7 @@ class MovieService extends BaseService implements MovieServiceInterface
             'age_limit' => $request->age_limit,
             'trailer' => $request->trailer,
             'director_id' => $request->director_id,
+            'category_id' => $request->category_id
         ];
         if ($request->hasFile('banner')) {
             $file = $request->file('banner');
@@ -43,7 +44,7 @@ class MovieService extends BaseService implements MovieServiceInterface
             }
         }
 
-        return $this->movieRepository->store($dataInput, Movie::class);
+        return $this->movieRepository->storeMovie($dataInput, Movie::class);
     }
 
     /**
@@ -82,6 +83,11 @@ class MovieService extends BaseService implements MovieServiceInterface
         return $this->movieRepository->getById($id, Movie::class);
     }
 
+    public function getMovieById($id): mixed
+    {
+        return $this->movieRepository->getById($id, Movie::class);
+    }
+
     public function update($request = null, $id = null): void
     {
         $startDate = $this->formatDate($request->start_date);
@@ -94,6 +100,7 @@ class MovieService extends BaseService implements MovieServiceInterface
             'age_limit' => $request->age_limit,
             'trailer' => $request->trailer,
             'director_id' => $request->director_id,
+            'category_id' => $request->category_id
         ];
         if ($request->hasFile('banner')) {
             $file = $request->file('banner');
@@ -116,7 +123,7 @@ class MovieService extends BaseService implements MovieServiceInterface
             }
         }
 
-        $this->movieRepository->update($dataInput, $id, Movie::class);
+        $this->movieRepository->updateMovie($dataInput, $id, Movie::class);
     }
 
     public function delete($id = null): void

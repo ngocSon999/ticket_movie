@@ -27,7 +27,7 @@
                         <a class="nav-link" href="#">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Login</a>
+                        <a class="nav-link" href="{{ route('web.login.index') }}">Login</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Register</a>

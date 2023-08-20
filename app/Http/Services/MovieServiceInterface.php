@@ -11,6 +11,7 @@ interface MovieServiceInterface extends BaseServiceInterface
     public function getList(Request $request);
     public function getById(int $id);
 
+    public function getMovieById($id): mixed;
     public function update(Request $request, int $id);
 
     public function delete(int $id);
